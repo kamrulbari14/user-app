@@ -1,4 +1,4 @@
-package com.kamrul.userapp.entity;
+package com.kamrul.userapp.entity.address;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

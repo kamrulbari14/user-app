@@ -1,17 +1,17 @@
-package com.kamrul.userapp.entity;
+package com.kamrul.userapp.entity.user;
 
+import com.kamrul.userapp.entity.address.Address;
+import com.kamrul.userapp.entity.BaseUserEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class Parent extends BaseUserEntity{
+public class Parent extends BaseUserEntity {
 
   @OneToOne(cascade = CascadeType.ALL)
   private Address address;

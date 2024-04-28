@@ -1,12 +1,10 @@
-package com.kamrul.userapp.entity;
+package com.kamrul.userapp.entity.user;
 
+import com.kamrul.userapp.entity.BaseUserEntity;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
