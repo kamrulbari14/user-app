@@ -1,6 +1,7 @@
 package com.kamrul.userapp.exception;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 /**
  * This Custom Exception is to handle any kind
@@ -13,11 +14,11 @@ public class ResponseProviderException extends RuntimeException {
   /**
    * <b>errorCode</b> is for handling <em>HttpStatus</em> codes to make API response more dynamic
    */
-  private final int errorCode;
+  private final HttpStatus httpStatus;
 
-  public ResponseProviderException(String message, int errorCode) {
+  public ResponseProviderException(String message, HttpStatus httpStatus) {
     super(message);
-    this.errorCode = errorCode;
+    this.httpStatus = httpStatus;
   }
 
 }

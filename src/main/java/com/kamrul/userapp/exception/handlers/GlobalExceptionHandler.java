@@ -5,6 +5,7 @@ import com.kamrul.userapp.exception.ResponseProviderException;
 import com.kamrul.userapp.util.builder.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -30,15 +31,9 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(ResponseProviderException.class)
   public ResponseEntity<Response<String>> handleCustomizedResponseException(
       ResponseProviderException exception) {
-    int errorCode = exception.getErrorCode();
-    HttpStatus status = HttpStatus.resolve(errorCode);
-
-    // Default to Internal Server Error
-    if (status == null) {
-      status = HttpStatus.INTERNAL_SERVER_ERROR;
-    }
-    return new ResponseEntity<>(ResponseBuilder.getFailureResponse(status, exception.getMessage()),
-        status);
+    return new ResponseEntity<>(
+        ResponseBuilder.getResponseOnlyWithMessage(exception.getHttpStatus(), exception.getMessage()),
+        exception.getHttpStatus());
   }
 
   /**
@@ -53,8 +48,24 @@ public class GlobalExceptionHandler {
   public ResponseEntity<Response<String>> handleNoResourceFoundException(
       NoResourceFoundException exception) {
     return new ResponseEntity<>(
-        ResponseBuilder.getFailureResponse(HttpStatus.NOT_FOUND, exception.getMessage()),
+        ResponseBuilder.getResponseOnlyWithMessage(HttpStatus.NOT_FOUND, exception.getMessage()),
         HttpStatus.NOT_FOUND);
+  }
+
+  /**
+   * This handler provides Response for unrecognized request methods which throws
+   * <em>HttpRequestMethodNotSupportedException</em>
+   *
+   * @param exception receives <em>HttpRequestMethodNotSupportedException</em> as parameter
+   * @return returns a dynamic response to client for better understanding
+   * @author Kamrul Bari
+   */
+  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+  public ResponseEntity<Response<String>> handleMethodNotSupported(
+      HttpRequestMethodNotSupportedException exception) {
+    return new ResponseEntity<>(
+        ResponseBuilder.getResponseOnlyWithMessage(HttpStatus.METHOD_NOT_ALLOWED, exception.getMessage()),
+        HttpStatus.METHOD_NOT_ALLOWED);
   }
 
   /**
@@ -66,7 +77,7 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Response<String>> handleException(Exception exception) {
-    return new ResponseEntity<>(ResponseBuilder.getFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+    return new ResponseEntity<>(ResponseBuilder.getResponseOnlyWithMessage(HttpStatus.INTERNAL_SERVER_ERROR,
         exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
