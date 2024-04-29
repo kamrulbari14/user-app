@@ -1,15 +1,19 @@
 package com.kamrul.userapp.exception.handlers;
 
+import com.kamrul.userapp.dto.response.Response;
 import com.kamrul.userapp.exception.ResponseProviderException;
+import com.kamrul.userapp.util.builder.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
- * The class {@code GlobalExceptionHandler} provides meaningful response to the client for
- * {@link ResponseProviderException} and {@link Exception}
- * @author  Kamrul Bari
+ * The class {@code GlobalExceptionHandler} provides meaningful response to the client for {@link
+ * ResponseProviderException}, {@link NoResourceFoundException} and {@link Exception}
+ *
+ * @author Kamrul Bari
  */
 
 @ControllerAdvice
@@ -24,7 +28,8 @@ public class GlobalExceptionHandler {
    * @author Kamrul Bari
    */
   @ExceptionHandler(ResponseProviderException.class)
-  public ResponseEntity<String> handleResponseException(ResponseProviderException exception) {
+  public ResponseEntity<Response<String>> handleCustomizedResponseException(
+      ResponseProviderException exception) {
     int errorCode = exception.getErrorCode();
     HttpStatus status = HttpStatus.resolve(errorCode);
 
@@ -32,18 +37,37 @@ public class GlobalExceptionHandler {
     if (status == null) {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
-    return new ResponseEntity<>(exception.getMessage(), status);
+    return new ResponseEntity<>(ResponseBuilder.getFailureResponse(status, exception.getMessage()),
+        status);
   }
 
   /**
-   * This handler provides Response for all other exception which is not recognised in
-   * <em>ResponseProviderException</em>
+   * This handler provides Response for unrecognized resources which throws
+   * <em>NoResourceFoundException</em>
+   *
+   * @param exception receives <em>NoResourceFoundException</em> as parameter
+   * @return returns a dynamic response to client for better understanding
+   * @author Kamrul Bari
+   */
+  @ExceptionHandler(NoResourceFoundException.class)
+  public ResponseEntity<Response<String>> handleNoResourceFoundException(
+      NoResourceFoundException exception) {
+    return new ResponseEntity<>(
+        ResponseBuilder.getFailureResponse(HttpStatus.NOT_FOUND, exception.getMessage()),
+        HttpStatus.NOT_FOUND);
+  }
+
+  /**
+   * This handler provides Response for all other exception which is not recognised
+   *
    * @param exception receives <em>Exception</em> as parameter
    * @return returns a dynamic response to client for better understanding
+   * @author Kamrul Bari
    */
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<String> handleException(Exception exception) {
-    return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+  public ResponseEntity<Response<String>> handleException(Exception exception) {
+    return new ResponseEntity<>(ResponseBuilder.getFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+        exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }
