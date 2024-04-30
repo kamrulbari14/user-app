@@ -6,10 +6,12 @@ import com.kamrul.userapp.dto.user.ParentDto;
 import com.kamrul.userapp.enums.ActiveStatus;
 import com.kamrul.userapp.service.ParentService;
 import com.kamrul.userapp.util.builder.ResponseBuilder;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +29,14 @@ public class ParentController {
   private final ParentService parentService;
 
   @PostMapping
-  public ResponseEntity<Response<ParentDto>> saveParent(@RequestBody ParentDto parentDto) {
+  public ResponseEntity<Response<ParentDto>> saveParent(@Valid @RequestBody ParentDto parentDto,
+      BindingResult result) {
+
+    if (result.hasErrors()) {
+      return ResponseEntity.badRequest()
+          .body(ResponseBuilder.getFailureResponse(result, "There are some validation errors!!"));
+    }
+
     Response<ParentDto> response = ResponseBuilder.getSuccessResponse(HttpStatus.CREATED,
         "Parent user created successfully", parentService.saveParentUser(parentDto), 1);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);

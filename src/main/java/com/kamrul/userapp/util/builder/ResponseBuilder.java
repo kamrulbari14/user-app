@@ -20,7 +20,7 @@ public final class ResponseBuilder {
     return dtoList;
   }
 
-  public static <T> Response<T> getResponseOnlyWithMessage(BindingResult result, String message) {
+  public static <T> Response<T> getFailureResponse(BindingResult result, String message) {
     return Response.<T>builder().message(message).errors(getCustomError(result))
         .status(HttpStatus.BAD_REQUEST.getReasonPhrase()).statusCode(HttpStatus.BAD_REQUEST.value())
         .timeStamp(new Date().getTime()).build();
