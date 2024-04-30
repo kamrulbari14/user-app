@@ -12,6 +12,6 @@ import lombok.Setter;
 @Entity
 public class Child extends BaseUserEntity {
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   private Parent parent;
 }
