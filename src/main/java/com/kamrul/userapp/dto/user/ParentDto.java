@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO class representing a parent user.
+ */
 @Getter
 @Setter
 public class ParentDto extends BaseUserDto {

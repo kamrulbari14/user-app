@@ -16,6 +16,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * Custom annotation used to mark controllers as API controllers. This annotation combines the
+ * functionality of various Spring annotations such as @Controller, @CrossOrigin, and @ResponseBody.
+ * It provides a convenient way to specify controller mappings for APIs and enables cross-origin
+ * resource sharing (CORS).
+ */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

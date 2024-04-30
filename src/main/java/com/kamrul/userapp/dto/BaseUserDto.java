@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Base DTO class representing common attributes for user DTOs.
+ */
 @Getter
 @Setter
 public class BaseUserDto {

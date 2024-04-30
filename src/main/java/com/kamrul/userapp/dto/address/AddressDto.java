@@ -3,6 +3,9 @@ package com.kamrul.userapp.dto.address;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO class representing an address.
+ */
 @Getter
 @Setter
 public class AddressDto {

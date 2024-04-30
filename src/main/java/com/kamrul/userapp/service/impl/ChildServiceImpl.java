@@ -17,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
 public class ChildServiceImpl implements ChildService {
@@ -25,6 +26,14 @@ public class ChildServiceImpl implements ChildService {
   private final ParentService parentService;
   private final ChildRepository repository;
 
+  /**
+   * Saves a new child user based on the provided ChildDto.
+   *
+   * @param childDto The DTO object containing information about the child user to be saved.
+   * @return The DTO representation of the saved child user.
+   * @throws ResponseProviderException If the child user cannot be created.
+   * @author Kamrul Bari
+   */
   @Override
   public ChildDto saveChildUser(ChildDto childDto) {
     modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
@@ -41,6 +50,14 @@ public class ChildServiceImpl implements ChildService {
     return modelMapper.map(newChild, ChildDto.class);
   }
 
+  /**
+   * Retrieves a child user by its ID.
+   *
+   * @param id The ID of the child user to retrieve.
+   * @return The DTO representation of the retrieved child user.
+   * @throws ResponseProviderException If the child user with the specified ID is not found.
+   * @author Kamrul Bari
+   */
   @Override
   public ChildDto getChildUserById(Long id) {
     Optional<Child> result = repository.findByIdAndActiveStatus(id, ActiveStatus.ACTIVE.getValue());
@@ -51,6 +68,14 @@ public class ChildServiceImpl implements ChildService {
     return modelMapper.map(result.get(), ChildDto.class);
   }
 
+  /**
+   * Retrieves all child users with the specified active status.
+   *
+   * @param status The active status of the child users to retrieve.
+   * @return A list of DTO representations of the retrieved child users.
+   * @throws ResponseProviderException If no child users are found with the specified status.
+   * @author Kamrul Bari
+   */
   @Override
   public List<ChildDto> getAllChildUserByActiveStatus(ActiveStatus status) {
     List<Child> childUserList = repository.findAllByActiveStatus(status.getValue());
@@ -62,6 +87,16 @@ public class ChildServiceImpl implements ChildService {
     return toDtoList(childUserList);
   }
 
+  /**
+   * Updates an existing child user with the provided information.
+   *
+   * @param childDto The DTO object containing updated information about the child user.
+   * @param id       The ID of the child user to update.
+   * @return The DTO representation of the updated child user.
+   * @throws ResponseProviderException If there is nothing to update or if the child user with the
+   *                                   specified ID is not found.
+   * @author Kamrul Bari
+   */
   @Override
   public ChildDto updateChildUser(ChildDto childDto, Long id) {
     if (childDto == null) {
@@ -83,6 +118,15 @@ public class ChildServiceImpl implements ChildService {
     return modelMapper.map(existingUser, ChildDto.class);
   }
 
+  /**
+   * Deletes a child user by ID, either permanently or by setting its active status to DELETE.
+   *
+   * @param id                The ID of the child user to delete.
+   * @param permanentlyDelete A flag indicating whether to permanently delete the child user.
+   * @return True if the child user is successfully deleted.
+   * @throws ResponseProviderException If the child user with the specified ID is not found.
+   * @author Kamrul Bari
+   */
   @Override
   public Boolean deleteChildUser(Long id, Boolean permanentlyDelete) {
     Optional<Child> result = repository.findByIdAndActiveStatus(id, ActiveStatus.ACTIVE.getValue());
@@ -102,6 +146,13 @@ public class ChildServiceImpl implements ChildService {
     return true;
   }
 
+  /**
+   * Converts a list of Child entities to a list of ChildDto objects.
+   *
+   * @param entityList The list of Child entities to convert.
+   * @return A list of DTO representations of the Child entities.
+   * @author Kamrul Bari
+   */
   private List<ChildDto> toDtoList(List<Child> entityList) {
     return entityList.stream().map(entity -> modelMapper.map(entity, ChildDto.class))
         .collect(Collectors.toList());

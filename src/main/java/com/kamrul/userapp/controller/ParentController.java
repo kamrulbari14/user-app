@@ -21,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Controller class responsible for handling HTTP requests related to parent users. This class
+ * provides endpoints for creating, retrieving, updating, and deleting parent users.
+ */
 @ApiController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/parents")
@@ -28,6 +32,13 @@ public class ParentController {
 
   private final ParentService parentService;
 
+  /**
+   * Endpoint to create a new parent user.
+   *
+   * @param parentDto The DTO object containing information about the parent user to be created.
+   * @param result    The binding result for validation.
+   * @return ResponseEntity containing the response to the client.
+   */
   @PostMapping
   public ResponseEntity<Response<ParentDto>> saveParent(@Valid @RequestBody ParentDto parentDto,
       BindingResult result) {
@@ -42,6 +53,12 @@ public class ParentController {
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
+  /**
+   * Endpoint to retrieve a parent user by ID.
+   *
+   * @param userId The ID of the parent user to retrieve.
+   * @return ResponseEntity containing the response to the client.
+   */
   @GetMapping("/{userId}")
   public ResponseEntity<Response<ParentDto>> getParentUserById(@PathVariable Long userId) {
     Response<ParentDto> response = ResponseBuilder.getSuccessResponse(HttpStatus.OK,
@@ -49,8 +66,14 @@ public class ParentController {
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
+  /**
+   * Endpoint to retrieve all parent users with optional filtering by status.
+   *
+   * @param status The active status of parent users to retrieve (optional).
+   * @return ResponseEntity containing the response to the client.
+   */
   @GetMapping
-  public ResponseEntity<Response<List<ParentDto>>> getParentUserById(
+  public ResponseEntity<Response<List<ParentDto>>> getParentUserList(
       @RequestParam(required = false) ActiveStatus status) {
     if (status == null) {
       status = ActiveStatus.ACTIVE;
@@ -62,6 +85,13 @@ public class ParentController {
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
+  /**
+   * Endpoint to update an existing parent user.
+   *
+   * @param userId    The ID of the parent user to update.
+   * @param parentDto The DTO object containing updated information about the parent user.
+   * @return ResponseEntity containing the response to the client.
+   */
   @PutMapping("/{userId}")
   public ResponseEntity<Response<ParentDto>> updateParentUser(@PathVariable Long userId,
       @RequestBody(required = false) ParentDto parentDto) {
@@ -70,6 +100,14 @@ public class ParentController {
     return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
   }
 
+  /**
+   * Endpoint to delete a parent user by ID, with an option for permanent deletion.
+   *
+   * @param userId    The ID of the parent user to delete.
+   * @param permanent Flag indicating whether to permanently delete the parent user (optional,
+   *                  default is false).
+   * @return ResponseEntity containing the response to the client.
+   */
   @DeleteMapping("/{userId}")
   public ResponseEntity<Response<String>> deleteParentUser(@PathVariable Long userId,
       @RequestParam(required = false) Boolean permanent) {
