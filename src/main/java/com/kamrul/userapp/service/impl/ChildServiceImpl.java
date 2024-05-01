@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ChildServiceImpl implements ChildService {
 
-  private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper = new ModelMapper();
   private final ParentService parentService;
   private final ChildRepository repository;
 

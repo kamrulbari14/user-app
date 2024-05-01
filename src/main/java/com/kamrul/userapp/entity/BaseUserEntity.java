@@ -14,6 +14,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
@@ -65,6 +67,12 @@ public class BaseUserEntity implements Serializable {
    * The active status of the entity.
    */
   private Integer activeStatus;
+
+  public BaseUserEntity(Long id, String firstName, String lastName) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
 
   /**
    * Sets data before inserting the entity into the database.
