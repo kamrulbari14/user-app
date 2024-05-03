@@ -4,7 +4,7 @@ package com.kamrul.userapp.enums;
  * Enum representing the active status of entities.
  */
 public enum ActiveStatus {
-  ACTIVE(1), ARCHIVE(2), DELETE(3), OPEN(4), CLOSED(5), PREVIOUS(6);
+  ACTIVE(1), DELETE(3);
 
   private final int value;
 
