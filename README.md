@@ -69,6 +69,37 @@ The following endpoints are available in the API:
 ***N.B:*** You can skip the `permanent` and `status` parameter too. By default `permanent` set to
 `false` and `status` set to `ACTIVE`.
 
+### Request Body Documentation
+
+##### Create Parent User (POST /api/v1/parents)
+
+**Request Body**:
+```json
+{
+  "firstName": "Kamrul",
+  "lastName": "Bari",
+  "address": {
+    "street": "Road-2",
+    "city": "Dhaka",
+    "state": "Bangladesh",
+    "zip": "1207"
+  }
+}
+```
+
+##### Create Child User (POST /api/v1/child)
+
+**Request Body**:
+```json
+{
+  "firstName": "Child",
+  "lastName": "One",
+  "parent": {
+    "id": 10
+  }
+}
+```
+
 ### Error Handling
 
 The API follows RESTful conventions for error responses. In case of any errors, appropriate HTTP
